@@ -19,10 +19,23 @@
     <section id="home">
         <h1>Bem-vindo ao meu site!</h1>
         <p>Este é um site pessoal em construção.</p>
+        <button id="contadorBtn">Contar</button>
+        <p>Contador: <span id="contador">0</span></p>
     </section>
 
     <footer>
         <p>&copy; 2024 Meu Site Pessoal</p>
     </footer>
+
+    <script>
+        let count = 0;
+        const contadorElement = document.getElementById('contador');
+        const contadorBtn = document.getElementById('contadorBtn');
+
+        contadorBtn.addEventListener('click', () => {
+            count++;
+            contadorElement.textContent = count;
+        });
+    </script>
 </body>
 </html>
