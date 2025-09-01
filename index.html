@@ -6,7 +6,7 @@
     <title>Meu Site Pessoal</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light-mode">
     <header>
         <nav>
             <ul>
@@ -21,6 +21,7 @@
         <p>Este é um site pessoal em construção.</p>
         <button id="contadorBtn">Contar</button>
         <p>Contador: <span id="contador">0</span></p>
+        <button id="theme-toggle">Alternar Tema</button>
     </section>
 
     <footer>
@@ -31,10 +32,17 @@
         let count = 0;
         const contadorElement = document.getElementById('contador');
         const contadorBtn = document.getElementById('contadorBtn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
         contadorBtn.addEventListener('click', () => {
             count++;
             contadorElement.textContent = count;
+        });
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
         });
     </script>
 </body>
