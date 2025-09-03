@@ -15,6 +15,11 @@
             </ul>
         </nav>
         <button id="theme-toggle">Alternar Tema</button>
+        <select id="language-select">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+        </select>
     </header>
 
     <section id="home">
@@ -28,6 +33,7 @@
     <script>
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
+        const languageSelect = document.getElementById('language-select');
 
         themeToggle.addEventListener('click', () => {
             if (body.getAttribute('data-theme') === 'light') {
@@ -35,6 +41,14 @@
             } else {
                 body.setAttribute('data-theme', 'light');
             }
+        });
+
+        languageSelect.addEventListener('change', () => {
+            const selectedLanguage = languageSelect.value;
+            // Implemente a lógica para alterar o idioma aqui.
+            // Por exemplo, você pode usar um objeto com traduções
+            // e atualizar o conteúdo da página com base no idioma selecionado.
+            console.log('Idioma selecionado:', selectedLanguage);
         });
     </script>
 </body>
