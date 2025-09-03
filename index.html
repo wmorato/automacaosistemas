@@ -19,10 +19,19 @@
     <section id="home">
         <h1>Bem-vindo ao meu site!</h1>
         <p>Este é um site pessoal em construção.</p>
+        <button id="theme-toggle">Alternar Tema</button>
     </section>
 
     <footer>
         <p>&copy; 2024 Meu Site Pessoal</p>
     </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
 </body>
 </html>
