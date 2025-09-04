@@ -24,59 +24,44 @@
     </header>
 
     <section id="home">
-        <h1 id="welcome-message">Bem-vindo ao meu site!</h1>
-        <p id="description">Este é um site pessoal em construção.</p>
+        <div id="welcome-container">
+            <h1 id="welcome-message">Bem-vindo ao meu site!</h1>
+            <p id="description">Este é um site pessoal em construção.</p>
+        </div>
+        <div id="calendar-container">
+            <div id="weekly-calendar"></div>
+        </div>
+        <div id="scheduling-form-container">
+            <h2>Agendamento de Corte de Cabelo</h2>
+            <form id="scheduling-form">
+                <label for="name">Nome:</label><br>
+                <input type="text" id="name" name="name">
+                <br><br>
+                <label for="date">Data:</label><br>
+                <input type="date" id="date" name="date">
+                <br><br>
+                <label for="time">Hora:</label><br>
+                <input type="time" id="time" name="time">
+                <br><br>
+                <label for="notes">Observações:</label><br>
+                <textarea id="notes" name="notes" rows="4" cols="50"></textarea>
+                <br><br>
+                <input type="submit" value="Agendar">
+            </form>
+            <div id="scheduling-confirmation" style="display: none;">
+                <p>Agendamento confirmado!</p>
+                <p>Detalhes: <span id="confirmation-details"></span></p>
+            </div>
+        </div>
+        <div id="scheduling-history-container">
+            <h2>Histórico de Agendamentos</h2>
+            <div id="scheduling-history"></div>
+        </div>
     </section>
 
     <footer>
         <p>&copy; 2024 Meu Site Pessoal</p>
     </footer>
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        const languageSelect = document.getElementById('language-select');
-        const welcomeMessage = document.getElementById('welcome-message');
-        const description = document.getElementById('description');
-
-        const translations = {
-            en: {
-                welcome: 'Welcome to my site!',
-                description: 'This is a personal website under construction.'
-            },
-            es: {
-                welcome: '¡Bienvenido a mi sitio!',
-                description: 'Este es un sitio web personal en construcción.'
-            },
-            pt: {
-                welcome: 'Bem-vindo ao meu site!',
-                description: 'Este é um site pessoal em construção.'
-            },
-            zh: {
-                welcome: '欢迎来到我的网站！',
-                description: '这是一个正在建设中的个人网站。'
-            }
-        };
-
-        function updateContent(language) {
-            welcomeMessage.textContent = translations[language].welcome;
-            description.textContent = translations[language].description;
-        }
-
-        themeToggle.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'light') {
-                body.setAttribute('data-theme', 'dark');
-            } else {
-                body.setAttribute('data-theme', 'light');
-            }
-        });
-
-        languageSelect.addEventListener('change', () => {
-            const selectedLanguage = languageSelect.value;
-            updateContent(selectedLanguage);
-        });
-
-        // Inicializa a tradução com o idioma padrão (Português)
-        updateContent('pt');
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
