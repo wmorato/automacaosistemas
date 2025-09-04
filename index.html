@@ -24,8 +24,13 @@
     </header>
 
     <section id="home">
-        <h1 id="welcome-message">Bem-vindo ao meu site!</h1>
-        <p id="description">Este é um site pessoal em construção.</p>
+        <div id="welcome-container">
+            <h1 id="welcome-message">Bem-vindo ao meu site!</h1>
+            <p id="description">Este é um site pessoal em construção.</p>
+        </div>
+        <div id="calendar-container">
+            <div id="calendar"></div>
+        </div>
     </section>
 
     <footer>
@@ -37,29 +42,96 @@
         const languageSelect = document.getElementById('language-select');
         const welcomeMessage = document.getElementById('welcome-message');
         const description = document.getElementById('description');
+        const calendarContainer = document.getElementById('calendar');
 
         const translations = {
             en: {
                 welcome: 'Welcome to my site!',
-                description: 'This is a personal website under construction.'
+                description: 'This is a personal website under construction.',
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
             },
             es: {
                 welcome: '¡Bienvenido a mi sitio!',
-                description: 'Este es un sitio web personal en construcción.'
+                description: 'Este es un sitio web personal en construcción.',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
             },
             pt: {
                 welcome: 'Bem-vindo ao meu site!',
-                description: 'Este é um site pessoal em construção.'
+                description: 'Este é um site pessoal em construção.',
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
             },
             zh: {
                 welcome: '欢迎来到我的网站！',
-                description: '这是一个正在建设中的个人网站。'
+                description: '这是一个正在建设中的个人网站。',
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
             }
         };
 
         function updateContent(language) {
             welcomeMessage.textContent = translations[language].welcome;
             description.textContent = translations[language].description;
+        }
+
+        function generateCalendar(language) {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            let month = currentMonth;
+            let year = currentYear;
+
+            function renderCalendar() {
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const startingDay = firstDay.getDay();
+                const daysInMonth = lastDay.getDate();
+
+                let calendarHTML = '<div class="calendar-header">';
+                calendarHTML += `<button id="prevMonth">&lt;</button>`;
+                calendarHTML += `<span id="currentMonth">${translations[language].monthNames[month]} ${year}</span>`;
+                calendarHTML += `<button id="nextMonth">&gt;</button>`;
+                calendarHTML += '</div>';
+
+                calendarHTML += '<div class="calendar-days">';
+                for (let i = 0; i < 7; i++) {
+                    calendarHTML += `<div class="day-name">${translations[language].dayNames[i].substring(0, 2)}</div>`;
+                }
+                calendarHTML += '</div>';
+
+                calendarHTML += '<div class="calendar-dates">';
+                for (let i = 0; i < startingDay; i++) {
+                    calendarHTML += '<div class="calendar-date empty"></div>';
+                }
+                for (let i = 1; i <= daysInMonth; i++) {
+                    calendarHTML += `<div class="calendar-date">${i}</div>`;
+                }
+                calendarHTML += '</div>';
+
+                calendarContainer.innerHTML = calendarHTML;
+
+                document.getElementById('prevMonth').addEventListener('click', () => {
+                    month--;
+                    if (month < 0) {
+                        month = 11;
+                        year--;
+                    }
+                    renderCalendar();
+                });
+
+                document.getElementById('nextMonth').addEventListener('click', () => {
+                    month++;
+                    if (month > 11) {
+                        month = 0;
+                        year++;
+                    }
+                    renderCalendar();
+                });
+            }
+
+            renderCalendar();
         }
 
         themeToggle.addEventListener('click', () => {
@@ -73,10 +145,12 @@
         languageSelect.addEventListener('change', () => {
             const selectedLanguage = languageSelect.value;
             updateContent(selectedLanguage);
+            generateCalendar(selectedLanguage);
         });
 
-        // Inicializa a tradução com o idioma padrão (Português)
+        // Inicializa a tradução com o idioma padrão (Português) e o calendário
         updateContent('pt');
+        generateCalendar('pt');
     </script>
 </body>
 </html>
