@@ -15,11 +15,16 @@
             </ul>
         </nav>
         <button id="theme-toggle">Alternar Tema</button>
+        <select id="language-select">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+        </select>
     </header>
 
     <section id="home">
-        <h1>Bem-vindo ao meu site!</h1>
-        <p>Este é um site pessoal em construção.</p>
+        <h1 id="welcome-message">Bem-vindo ao meu site!</h1>
+        <p id="description">Este é um site pessoal em construção.</p>
     </section>
 
     <footer>
@@ -28,6 +33,29 @@
     <script>
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
+        const languageSelect = document.getElementById('language-select');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const description = document.getElementById('description');
+
+        const translations = {
+            en: {
+                welcome: 'Welcome to my site!',
+                description: 'This is a personal website under construction.'
+            },
+            es: {
+                welcome: '¡Bienvenido a mi sitio!',
+                description: 'Este es un sitio web personal en construcción.'
+            },
+            pt: {
+                welcome: 'Bem-vindo ao meu site!',
+                description: 'Este é um site pessoal em construção.'
+            }
+        };
+
+        function updateContent(language) {
+            welcomeMessage.textContent = translations[language].welcome;
+            description.textContent = translations[language].description;
+        }
 
         themeToggle.addEventListener('click', () => {
             if (body.getAttribute('data-theme') === 'light') {
@@ -36,6 +64,14 @@
                 body.setAttribute('data-theme', 'light');
             }
         });
+
+        languageSelect.addEventListener('change', () => {
+            const selectedLanguage = languageSelect.value;
+            updateContent(selectedLanguage);
+        });
+
+        // Inicializa a tradução com o idioma padrão (Português)
+        updateContent('pt');
     </script>
 </body>
 </html>
