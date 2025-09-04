@@ -29,7 +29,7 @@
             <p id="description">Este é um site pessoal em construção.</p>
         </div>
         <div id="calendar-container">
-            <div id="calendar"></div>
+            <div id="weekly-calendar"></div>
         </div>
         <div id="scheduling-form-container">
             <h2>Agendamento de Corte de Cabelo</h2>
@@ -64,7 +64,7 @@
         const languageSelect = document.getElementById('language-select');
         const welcomeMessage = document.getElementById('welcome-message');
         const description = document.getElementById('description');
-        const calendarContainer = document.getElementById('calendar');
+        const weeklyCalendarContainer = document.getElementById('weekly-calendar');
         const schedulingForm = document.getElementById('scheduling-form');
         const schedulingConfirmation = document.getElementById('scheduling-confirmation');
         const confirmationDetails = document.getElementById('confirmation-details');
@@ -150,62 +150,55 @@
             document.querySelector('#scheduling-history-container h2').textContent = translations[language].history;
         }
 
-        function generateCalendar(language) {
+        function generateWeeklyCalendar() {
             const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-            let month = currentMonth;
-            let year = currentYear;
+            const dayOfWeek = today.getDay(); // 0 (Sun) to 6 (Sat)
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - dayOfWeek);
 
-            function renderCalendar() {
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const startingDay = firstDay.getDay();
-                const daysInMonth = lastDay.getDate();
+            let calendarHTML = '<div class="weekly-calendar">';
 
-                let calendarHTML = '<div class="calendar-header">';
-                calendarHTML += `<button id="prevMonth">&lt;</button>`;
-                calendarHTML += `<span id="currentMonth">${translations[language].monthNames[month]} ${year}</span>`;
-                calendarHTML += `<button id="nextMonth">&gt;</button>`;
-                calendarHTML += '</div>';
-
-                calendarHTML += '<div class="calendar-days">';
-                for (let i = 0; i < 7; i++) {
-                    calendarHTML += `<div class="day-name">${translations[language].dayNames[i].substring(0, 2)}</div>`;
-                }
-                calendarHTML += '</div>';
-
-                calendarHTML += '<div class="calendar-dates">';
-                for (let i = 0; i < startingDay; i++) {
-                    calendarHTML += '<div class="calendar-date empty"></div>';
-                }
-                for (let i = 1; i <= daysInMonth; i++) {
-                    calendarHTML += `<div class="calendar-date">${i}</div>`;
-                }
-                calendarHTML += '</div>';
-
-                calendarContainer.innerHTML = calendarHTML;
-
-                document.getElementById('prevMonth').addEventListener('click', () => {
-                    month--;
-                    if (month < 0) {
-                        month = 11;
-                        year--;
-                    }
-                    renderCalendar();
-                });
-
-                document.getElementById('nextMonth').addEventListener('click', () => {
-                    month++;
-                    if (month > 11) {
-                        month = 0;
-                        year++;
-                    }
-                    renderCalendar();
-                });
+            // Days of the week header
+            calendarHTML += '<div class="week-days">';
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(weekStart);
+                day.setDate(weekStart.getDate() + i);
+                calendarHTML += `<div class="day-name">${translations[languageSelect.value].dayNames[day.getDay()].substring(0, 3)} ${day.getDate()}</div>`;
             }
+            calendarHTML += '</div>';
 
-            renderCalendar();
+            // Hours and appointment slots
+            const hours = Array.from({ length: 10 }, (_, i) => i + 8); // From 8 AM to 17 PM
+            hours.forEach(hour => {
+                calendarHTML += '<div class="hour-row">';
+                calendarHTML += `<div class="hour-label">${hour}:00</div>`;
+                for (let i = 0; i < 7; i++) {
+                    calendarHTML += `<div class="time-slot" data-day="${i}" data-hour="${hour}"></div>`;
+                }
+                calendarHTML += '</div>';
+            });
+
+            calendarHTML += '</div>';
+            weeklyCalendarContainer.innerHTML = calendarHTML;
+
+            // Add click listeners to time slots
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.addEventListener('click', () => {
+                    const day = parseInt(slot.dataset.day);
+                    const hour = parseInt(slot.dataset.hour);
+                    const date = new Date(weekStart);
+                    date.setDate(weekStart.getDate() + day);
+                    const formattedDate = date.toISOString().slice(0, 10);
+                    const formattedTime = `${hour.toString().padStart(2, '0')}:00`;
+
+                    // Pre-fill the form
+                    document.getElementById('date').value = formattedDate;
+                    document.getElementById('time').value = formattedTime;
+
+                    // Scroll to the form
+                    schedulingForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
         }
 
         themeToggle.addEventListener('click', () => {
@@ -219,7 +212,7 @@
         languageSelect.addEventListener('change', () => {
             const selectedLanguage = languageSelect.value;
             updateContent(selectedLanguage);
-            generateCalendar(selectedLanguage);
+            generateWeeklyCalendar();
         });
 
         let schedulingHistoryData = [];
@@ -249,7 +242,7 @@
 
         // Inicializa a tradução com o idioma padrão (Português) e o calendário
         updateContent('pt');
-        generateCalendar('pt');
+        generateWeeklyCalendar();
     </script>
 </body>
 </html>
