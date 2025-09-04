@@ -173,7 +173,13 @@
                 calendarHTML += '<div class="hour-row">';
                 calendarHTML += `<div class="hour-label">${hour}:00</div>`;
                 for (let i = 0; i < 7; i++) {
-                    calendarHTML += `<div class="time-slot" data-day="${i}" data-hour="${hour}"></div>`;
+                    const date = new Date(weekStart);
+                    date.setDate(weekStart.getDate() + i);
+                    const formattedDate = date.toISOString().slice(0, 10);
+                    const formattedTime = `${hour.toString().padStart(2, '0')}:00`;
+                    const isScheduled = isTimeSlotScheduled(formattedDate, formattedTime);
+                    const slotClass = isScheduled ? 'time-slot scheduled' : 'time-slot';
+                    calendarHTML += `<div class="${slotClass}" data-day="${i}" data-hour="${hour}" data-date="${formattedDate}" data-time="${formattedTime}"></div>`;
                 }
                 calendarHTML += '</div>';
             });
@@ -182,7 +188,7 @@
             weeklyCalendarContainer.innerHTML = calendarHTML;
 
             // Add click listeners to time slots
-            document.querySelectorAll('.time-slot').forEach(slot => {
+            document.querySelectorAll('.time-slot:not(.scheduled)').forEach(slot => {
                 slot.addEventListener('click', () => {
                     const day = parseInt(slot.dataset.day);
                     const hour = parseInt(slot.dataset.hour);
@@ -225,6 +231,10 @@
             schedulingHistory.innerHTML = historyHTML;
         }
 
+        function isTimeSlotScheduled(date, time) {
+            return schedulingHistoryData.some(appointment => appointment.includes(date) && appointment.includes(time));
+        }
+
         schedulingForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const name = document.getElementById('name').value;
@@ -238,6 +248,7 @@
 
             schedulingHistoryData.push(details);
             displaySchedulingHistory();
+            generateWeeklyCalendar(); // Refresh calendar after scheduling
         });
 
         // Inicializa a tradução com o idioma padrão (Português) e o calendário

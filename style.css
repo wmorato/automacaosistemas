@@ -94,6 +94,11 @@ body[data-theme="dark"] {
     background-color: #e0e0e0;
 }
 
+.time-slot.scheduled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 #scheduling-form-container {
     text-align: center;
     margin-top: 20px;
