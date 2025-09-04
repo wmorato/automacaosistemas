@@ -31,6 +31,24 @@
         <div id="calendar-container">
             <div id="calendar"></div>
         </div>
+        <div id="scheduling-form-container">
+            <h2>Agendamento de Corte de Cabelo</h2>
+            <form id="scheduling-form">
+                <label for="name">Nome:</label><br>
+                <input type="text" id="name" name="name"><br><br>
+                <label for="date">Data:</label><br>
+                <input type="date" id="date" name="date"><br><br>
+                <label for="time">Hora:</label><br>
+                <input type="time" id="time" name="time"><br><br>
+                <label for="notes">Observações:</label><br>
+                <textarea id="notes" name="notes" rows="4" cols="50"></textarea><br><br>
+                <input type="submit" value="Agendar">
+            </form>
+            <div id="scheduling-confirmation" style="display: none;">
+                <p>Agendamento confirmado!</p>
+                <p>Detalhes: <span id="confirmation-details"></span></p>
+            </div>
+        </div>
     </section>
 
     <footer>
@@ -43,37 +61,83 @@
         const welcomeMessage = document.getElementById('welcome-message');
         const description = document.getElementById('description');
         const calendarContainer = document.getElementById('calendar');
+        const schedulingForm = document.getElementById('scheduling-form');
+        const schedulingConfirmation = document.getElementById('scheduling-confirmation');
+        const confirmationDetails = document.getElementById('confirmation-details');
 
         const translations = {
             en: {
                 welcome: 'Welcome to my site!',
                 description: 'This is a personal website under construction.',
                 monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+                dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                schedulingForm: {
+                    title: 'Haircut Appointment',
+                    name: 'Name',
+                    date: 'Date',
+                    time: 'Time',
+                    notes: 'Notes',
+                    submit: 'Schedule'
+                },
+                confirmation: 'Appointment confirmed! Details:'
             },
             es: {
                 welcome: '¡Bienvenido a mi sitio!',
                 description: 'Este es un sitio web personal en construcción.',
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                schedulingForm: {
+                    title: 'Cita para Corte de Cabello',
+                    name: 'Nombre',
+                    date: 'Fecha',
+                    time: 'Hora',
+                    notes: 'Notas',
+                    submit: 'Agendar'
+                },
+                confirmation: '¡Cita confirmada! Detalles:'
             },
             pt: {
                 welcome: 'Bem-vindo ao meu site!',
                 description: 'Este é um site pessoal em construção.',
                 monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                schedulingForm: {
+                    title: 'Agendamento de Corte de Cabelo',
+                    name: 'Nome',
+                    date: 'Data',
+                    time: 'Hora',
+                    notes: 'Observações',
+                    submit: 'Agendar'
+                },
+                confirmation: 'Agendamento confirmado! Detalhes:'
             },
             zh: {
                 welcome: '欢迎来到我的网站！',
                 description: '这是一个正在建设中的个人网站。',
                 monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-                dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+                dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                schedulingForm: {
+                    title: '理发预约',
+                    name: '姓名',
+                    date: '日期',
+                    time: '时间',
+                    notes: '备注',
+                    submit: '预约'
+                },
+                confirmation: '预约已确认！ 详情：'
             }
         };
 
         function updateContent(language) {
             welcomeMessage.textContent = translations[language].welcome;
             description.textContent = translations[language].description;
+            // Update scheduling form labels and button
+            document.querySelector('#scheduling-form-container h2').textContent = translations[language].schedulingForm.title;
+            document.querySelector('label[for="name"]').textContent = translations[language].schedulingForm.name + ':';
+            document.querySelector('label[for="date"]').textContent = translations[language].schedulingForm.date + ':';
+            document.querySelector('label[for="time"]').textContent = translations[language].schedulingForm.time + ':';
+            document.querySelector('label[for="notes"]').textContent = translations[language].schedulingForm.notes + ':';
+            document.querySelector('#scheduling-form input[type="submit"]').value = translations[language].schedulingForm.submit;
         }
 
         function generateCalendar(language) {
@@ -146,6 +210,18 @@
             const selectedLanguage = languageSelect.value;
             updateContent(selectedLanguage);
             generateCalendar(selectedLanguage);
+        });
+
+        schedulingForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const notes = document.getElementById('notes').value;
+
+            const details = `Nome: ${name}, Data: ${date}, Hora: ${time}, Observações: ${notes}`;
+            confirmationDetails.textContent = details;
+            schedulingConfirmation.style.display = 'block';
         });
 
         // Inicializa a tradução com o idioma padrão (Português) e o calendário

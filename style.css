@@ -91,3 +91,44 @@ body[data-theme="dark"] {
 .calendar-date.empty {
     border: none;
 }
+
+#scheduling-form-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#scheduling-form {
+    display: inline-block;
+    text-align: left;
+    margin-top: 10px;
+}
+
+#scheduling-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#scheduling-form input[type="text"], #scheduling-form input[type="date"], #scheduling-form input[type="time"], #scheduling-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#scheduling-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#scheduling-confirmation {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
