@@ -49,6 +49,10 @@
                 <p>Detalhes: <span id="confirmation-details"></span></p>
             </div>
         </div>
+        <div id="scheduling-history-container">
+            <h2>Histórico de Agendamentos</h2>
+            <div id="scheduling-history"></div>
+        </div>
     </section>
 
     <footer>
@@ -64,6 +68,7 @@
         const schedulingForm = document.getElementById('scheduling-form');
         const schedulingConfirmation = document.getElementById('scheduling-confirmation');
         const confirmationDetails = document.getElementById('confirmation-details');
+        const schedulingHistory = document.getElementById('scheduling-history');
 
         const translations = {
             en: {
@@ -79,7 +84,8 @@
                     notes: 'Notes',
                     submit: 'Schedule'
                 },
-                confirmation: 'Appointment confirmed! Details:'
+                confirmation: 'Appointment confirmed! Details:',
+                history: 'Scheduling History'
             },
             es: {
                 welcome: '¡Bienvenido a mi sitio!',
@@ -94,7 +100,8 @@
                     notes: 'Notas',
                     submit: 'Agendar'
                 },
-                confirmation: '¡Cita confirmada! Detalles:'
+                confirmation: '¡Cita confirmada! Detalles:',
+                history: 'Historial de Citas'
             },
             pt: {
                 welcome: 'Bem-vindo ao meu site!',
@@ -109,7 +116,8 @@
                     notes: 'Observações',
                     submit: 'Agendar'
                 },
-                confirmation: 'Agendamento confirmado! Detalhes:'
+                confirmation: 'Agendamento confirmado! Detalhes:',
+                history: 'Histórico de Agendamentos'
             },
             zh: {
                 welcome: '欢迎来到我的网站！',
@@ -124,7 +132,8 @@
                     notes: '备注',
                     submit: '预约'
                 },
-                confirmation: '预约已确认！ 详情：'
+                confirmation: '预约已确认！ 详情：',
+                history: '预约历史'
             }
         };
 
@@ -138,6 +147,7 @@
             document.querySelector('label[for="time"]').textContent = translations[language].schedulingForm.time + ':';
             document.querySelector('label[for="notes"]').textContent = translations[language].schedulingForm.notes + ':';
             document.querySelector('#scheduling-form input[type="submit"]').value = translations[language].schedulingForm.submit;
+            document.querySelector('#scheduling-history-container h2').textContent = translations[language].history;
         }
 
         function generateCalendar(language) {
@@ -212,6 +222,16 @@
             generateCalendar(selectedLanguage);
         });
 
+        let schedulingHistoryData = [];
+
+        function displaySchedulingHistory() {
+            let historyHTML = '';
+            schedulingHistoryData.forEach(appointment => {
+                historyHTML += `<p>${appointment}</p>`;
+            });
+            schedulingHistory.innerHTML = historyHTML;
+        }
+
         schedulingForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const name = document.getElementById('name').value;
@@ -222,6 +242,9 @@
             const details = `Nome: ${name}, Data: ${date}, Hora: ${time}, Observações: ${notes}`;
             confirmationDetails.textContent = details;
             schedulingConfirmation.style.display = 'block';
+
+            schedulingHistoryData.push(details);
+            displaySchedulingHistory();
         });
 
         // Inicializa a tradução com o idioma padrão (Português) e o calendário
